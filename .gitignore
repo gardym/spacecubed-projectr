@@ -1,0 +1,6 @@
+*swp
+start-tweaming.mongod.sh
+.bundle/
+bin/
+vendor/
+.env

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script type="text/javascript" src="jquery-1.7.2.min.js"></script>
+    <script type="text/javascript">
+      $(function() {
+
+        window.start_time = new Date();
+
+        var default_interval = 3 * 1000;
+        var default_ttl = 3 * 60 * 1000;
+        window.counter = 0;
+
+        var to_time_string = function(date) {
+          return Math.floor(date.getTime() / 1000);
+        };
+
+        window.setInterval(function() {
+
+          window.counter += default_interval;
+          var now_time = new Date();
+
+          // Load new tweets
+          $.get("/events?from=" + to_time_string(window.start_time) + "&to=" + to_time_string(now_time), function(data) {
+            var tweets = JSON.parse(data);
+            $.each(tweets, function(_, tweet) {
+              $("#output").append("<p>" + tweet.username + ": " + tweet.text + "</p>");
+            });
+          });
+
+          window.start_time = now_time;
+        }, default_interval);
+      });
+    </script>
+  </head>
+  <body>
+    <div id="output"></div>
+  </body>
+</html>
