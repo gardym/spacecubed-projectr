@@ -25,6 +25,9 @@
             var tweets = JSON.parse(data);
             $.each(tweets, function(_, tweet) {
               $("#output").append("<p>" + tweet.username + ": " + tweet.text + "</p>");
+              if(tweet.image) {
+                $("#output").append("<p><img src='" + tweet.image + "' /></p>")
+              }
             });
           });
 
