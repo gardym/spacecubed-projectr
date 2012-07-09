@@ -17,7 +17,7 @@ module Tweaming
       @max_timestamp = time_now
       puts "-- Instagr -- Searching for 'grams... (from #{@min_timestamp} to #{@max_timestamp})"
       begin
-        grams = Instagram.media_search("-31.9558", "115.8589",
+        grams = Instagram.media_search(ENV['LAT'], ENV['LNG'],
                                        :min_timestamp => @min_timestamp,
                                        :max_timestamp => @max_timestamp,
                                        :distance => 5000) # 5kms - the max Instagram radius
