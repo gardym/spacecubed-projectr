@@ -23,8 +23,6 @@ class AsyncTweaming < Sinatra::Base
     from = Time.at(params[:from].to_i)
     to = Time.at(params[:to].to_i)
 
-    puts "Fetching events from #{from} to #{to}"
-
     events_query = {"at" => { "$gte" => from, "$lt" => to } }
 
     events_cursor = @events_collection.find(events_query)

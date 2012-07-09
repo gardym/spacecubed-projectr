@@ -52,6 +52,6 @@ EM.synchrony do
   FirehoseSource.new(db, user_stream_options)
 
   instagram = InstagramSource.new(db)
-  EM::Synchrony.add_periodic_timer(10) { instagram.poll }
+  EM::Synchrony.add_periodic_timer(30) { instagram.poll }
   instagram.poll
 end
