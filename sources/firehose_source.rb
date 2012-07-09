@@ -37,7 +37,8 @@ module Tweaming
           :lat => tweet["coordinates"]["coordinates"][1],
           :lng => tweet["coordinates"]["coordinates"][0],
         } : nil,
-        :place => tweet["place"]
+        :place => tweet["place"],
+        :recorded_at => Time.now
       }
     end
   end

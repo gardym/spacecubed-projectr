@@ -52,13 +52,14 @@ module Tweaming
         :name => gram["user"]["full_name"],
         :profile_image => gram["user"]["profile_picture"],
         :text => gram["link"],
-        :image => gram["link"],
+        :image => gram["images"]["standard_resolution"]["url"],
         :at => Time.at(gram["created_time"].to_i),
         :coordinates => {
           :lat => gram["location"]["latitude"],
           :lng => gram["location"]["longitude"]
         },
-        :place => gram["location"]["name"]
+        :place => gram["location"]["name"],
+        :recorded_at => Time.now
       }
     end
   end
