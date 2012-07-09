@@ -45,7 +45,7 @@ user_stream_options = {
 # Reactor starts here.
 EM.synchrony do
   db = EM::Mongo::Connection.new.db('tweaming')
-  Rack::Handler::Thin.run AsyncTweaming.new, :Port => 8080
+  Rack::Handler::Thin.run AsyncTweaming.new, :Port => ENV['PORT']
 
   FirehoseSource.new(db, firehose_term_options)
   FirehoseSource.new(db, user_stream_options)
