@@ -23,7 +23,7 @@ class AsyncTweaming < Sinatra::Base
     from = Time.at(params[:from].to_i)
     to = Time.at(params[:to].to_i)
 
-    events_query = {"at" => { "$gte" => from, "$lt" => to } }
+    events_query = {"recorded_at" => { "$gte" => from, "$lt" => to } }
 
     events_cursor = @events_collection.find(events_query)
     events_cursor.defer_as_a.callback do |events|
