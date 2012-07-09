@@ -3,6 +3,7 @@ require 'em-mongo'
 
 require 'sources/firehose_source'
 require 'sources/instagram_source'
+require 'mongodb'
 include Tweaming
 
 require 'app/tweaming'
@@ -44,7 +45,7 @@ user_stream_options = {
 
 # Reactor starts here.
 EM.synchrony do
-  db = EM::Mongo::Connection.new.db('tweaming')
+  db = DB.connect
   Rack::Handler::Thin.run AsyncTweaming.new, :Port => ENV['PORT']
 
   FirehoseSource.new(db, firehose_term_options)

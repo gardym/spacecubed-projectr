@@ -2,13 +2,15 @@ require 'json'
 require 'em-mongo'
 require 'sinatra/async'
 
+require 'mongodb'
+
 class AsyncTweaming < Sinatra::Base
   register Sinatra::Async
 
   attr_accessor :events_collection
 
   def initialize
-    db = EM::Mongo::Connection.new.db('tweaming')
+    db = Tweaming::DB.connect
     @events_collection = db.collection('events')
     super
   end
