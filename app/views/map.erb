@@ -123,7 +123,7 @@
           return Math.floor(date.getTime() / 1000);
         };
 
-        $.get("/events?from=0&to=" + to_time_string(new Date()), function(data) {
+        $.get("/events?from=" + (to_time_string(new Date()) - (60 * 60 * 12)) + "&to=" + to_time_string(new Date()), function(data) {
           var tweets = JSON.parse(data);
           $.each(tweets, function(_, tweet) {
             if(tweet.coordinates) {
