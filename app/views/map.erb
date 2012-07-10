@@ -1,0 +1,160 @@
+<html>
+
+  <head>
+    <link rel="stylesheet" href="jquery.qtip.min.css" />
+    <style type='text/css'>
+
+      body, p, td {
+        font-family: "Tahoma";
+        font-size: 0.85em;
+      }
+
+      body {
+        margin: 0;
+        padding: 0;
+      }
+
+      #map {
+        background-image: url('bg.png');
+        background-color: #000;
+        width: 1000px;
+        height: 550px;
+      }
+
+      #pin, #template {
+        display: none;
+      }
+
+      .pin {
+        width: 40px;
+        height 40px;
+        position: absolute;
+        -webkit-transition: top 0.7s ease-in;
+      }
+
+      .template p {
+        width: 220px;
+      }
+      .template .author {
+        color: #079;
+        font-weight: bold;
+      }
+
+      .template .date {
+        color: #bbb;
+        font-size: 0.7em;
+      }
+
+      .template .pin-img {
+        width: 24px;
+        float: left;
+      }
+
+      .template .image {
+        width: 100px;
+        float: right;
+        display: none;
+      }
+
+    </style>
+    <script src="jquery-1.7.2.min.js"></script>
+    <script src="jquery.qtip.min.js"></script>
+    <script type="text/javascript">
+      $(function() {
+
+        var width = $("#map").width(),
+            height = $("#map").height();
+
+        var origin_lat = -31.948903,
+            origin_lng = 115.850873
+
+        var end_lat = -31.962066;
+        var end_lng = 115.868683;
+
+        var lat_width = Math.abs(end_lat - origin_lat);
+        var lng_height = Math.abs(end_lng - origin_lng);
+
+        var draw_pin = function(x, y, tweet) {
+          y = y - 33;
+          x = x - 11;
+
+          var pin = $('#pin').clone().appendTo('#map').attr("id", "");
+
+          var bubble = $("#template").clone().removeAttr("id");
+          bubble.find(".author").text(tweet.username);
+          bubble.find(".text").text(tweet.text);
+          bubble.find(".date").text(tweet.at);
+
+          if(tweet.image) {
+            bubble.find(".image").show().attr("src", tweet.image);
+            bubble.find(".text").hide();
+          }
+
+          pin.on('webkitTransitionEnd', function() {
+            pin.qtip( {
+              content: {
+                text: bubble
+              },
+              show: { ready: true },
+              position: {
+                my: 'bottom right',
+                at: 'top left'
+              },
+              style: { classes: 'ui-tooltip-shadow ui-tooltip-bootstrap' },
+              hide: false
+            });
+          });
+
+          pin.css('top', (y - (height + 40)) + "px");
+          setTimeout(function() {
+            pin.css('left', x + 'px');
+            pin.css('top', y + 'px');
+            }, 1);
+        };
+
+        var drop = function(lat, lng, tweet) {
+          var x = (Math.abs(end_lat - lat) / lat_width) * width;
+          var y = (Math.abs(end_lng - lng) / lng_height) * height;
+
+          draw_pin(x, y, tweet);
+        };
+
+        var to_time_string = function(date) {
+          return Math.floor(date.getTime() / 1000);
+        };
+
+        $.get("/events?from=0&to=" + to_time_string(new Date()), function(data) {
+          var tweets = JSON.parse(data);
+          $.each(tweets, function(_, tweet) {
+            if(tweet.coordinates) {
+              console.log(tweet);
+              drop(tweet.coordinates.lat, tweet.coordinates.lng, tweet);
+            }
+          });
+        });
+
+//        drop(-31.9558, 115.8589); // middle
+//        drop(-31.948903, 115.850873); // top left
+//        drop(-31.962066, 115.868683); // bottom right
+      });
+    </script>
+  </head>
+
+  <body>
+
+    <div id='map'></div>
+
+    <img src='red_pin.png' id='pin' class='pin' />
+
+    <div id='template' class='template'>
+      <img src='red_pin.png' class='pin-img' />
+      <p>
+        <span class='author'>@gardym</span>:
+        <img class='image' />
+        <span class='text'>I can't believe it's not butter!</span>
+        <br />
+        <span class='date'>3 seconds ago</span>
+      </p>
+    </div>
+  </body>
+</html>

@@ -19,6 +19,10 @@ class AsyncTweaming < Sinatra::Base
     body { erb :client }
   end
 
+  aget '/map' do
+    body { erb :map }
+  end
+
   aget '/events' do #?from=<unix timestamp>&to=<unix timestamp>
     from = Time.at(params[:from].to_i)
     to = Time.at(params[:to].to_i)
